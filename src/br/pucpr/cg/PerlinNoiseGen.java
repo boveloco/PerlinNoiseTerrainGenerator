@@ -2,21 +2,18 @@ package br.pucpr.cg;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import java.util.Random;
 
 public class PerlinNoiseGen {
 
-	static float perlin[][];
+	private float perlin[][];
 
 	// PerlinNoiseGen(int width, int height)
 	// {
 	// perlin = new float[width][height];
 	// }
 
-	public static double smoothNoise(double x, double y, int width, int height) {
+	public double smoothNoise(double x, double y, int width, int height) {
 		// get fractional part of x and y
 		double fractX = x - (int) x;
 		double fractY = y - (int) y;
@@ -39,7 +36,7 @@ public class PerlinNoiseGen {
 		return value;
 	}
 
-	public static double turb(double x, double y, double size, int width, int height) {
+	public double turb(double x, double y, double size, int width, int height) {
 		double value = 0.0, initialSize = size;
 
 		while (size >= 1) {
@@ -50,7 +47,7 @@ public class PerlinNoiseGen {
 		return (130.0 * value / initialSize);
 	}
 
-	static void GeneratePerlin(int width, int height) {
+	public BufferedImage GeneratePerlin(int width, int height) {
 		Random generator = new Random();
 		perlin = new float[width][height];
 		BufferedImage result = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -79,14 +76,6 @@ public class PerlinNoiseGen {
             }
 		}
 
-		try {
-			ImageIO.write(result, "png", new File("C:/Users/Rodigo/Dropbox/Jogos Digitais/Processadores Gráficos/img/opengl/heights/perlin1.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void main(String[] args) throws IOException {
-		GeneratePerlin(500, 500);
+		return result;
 	}
 }

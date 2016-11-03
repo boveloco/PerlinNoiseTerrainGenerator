@@ -25,7 +25,7 @@ import br.pucpr.mage.postfx.PostFXMaterial;
 import br.pucpr.cg.PerlinNoiseGen;
 
 public class WaterScene implements Scene {
-    private static final String PATH = "C:/Users/Rodigo/Dropbox/Jogos Digitais/Processadores Gráficos/img/opengl/";
+    private static final String PATH = "../img/opengl/";
     private static final float WATER_H = 11.0f;
     
     private Keyboard keys = Keyboard.getInstance();
@@ -69,12 +69,10 @@ public class WaterScene implements Scene {
                 new Vector3f( 0.1f,  0.1f,  0.1f), //ambient
                 new Vector3f( 1.0f,  1.0f,  1.0f),    //diffuse
                 new Vector3f( 1.0f,  1.0f,  1.0f));   //specular
-        
-        PerlinNoiseGen.GeneratePerlin(500, 500);
 
         //Carga do terreno
         try {
-            mesh = MeshFactory.loadTerrain(new File(PATH + "heights/perlin1.png"), 0.4f, 3);
+            mesh = MeshFactory.loadTerrain(new File("../perlin.png"), 0.4f, 3);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -141,18 +139,18 @@ public class WaterScene implements Scene {
             lookY -= SPEED * secs;
         }    
         
-        if (keys.isDown(GLFW_KEY_SPACE)) {
-        	PerlinNoiseGen.GeneratePerlin(500, 500);
-
-            //Carga do terreno
-            try {
-                mesh = MeshFactory.loadTerrain(new File(PATH + "heights/perlin1.png"), 0.4f, 3);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                System.exit(1);
-            }              
-        }
+//        if (keys.isDown(GLFW_KEY_SPACE)) {
+//        	PerlinNoiseGen.GeneratePerlin(500, 500);
+//
+//            //Carga do terreno
+//            try {
+//                mesh = MeshFactory.loadTerrain(new File(PATH + "heights/perlin1.png"), 0.4f, 3);
+//            } catch (IOException e) {
+//                // TODO Auto-generated catch block
+//                e.printStackTrace();
+//                System.exit(1);
+//            }              
+//        }
         camera.getTarget().set(lookX, lookY, 0.0f);
         skyMaterial.addTime(secs);
     }
