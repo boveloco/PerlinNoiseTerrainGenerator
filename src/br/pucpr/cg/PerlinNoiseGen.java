@@ -58,7 +58,7 @@ public class PerlinNoiseGen {
 		}
 		for (int y = 0; y < result.getHeight() - 1; y++) {
 			for (int x = 0; x < result.getWidth() - 1; x++) {
-				int cor = (int) turb(x, y, 32, width, height);
+				int cor = (int) turb(x, y, 128, width, height);
 				result.setRGB(x, y, new Color(cor, cor, cor).getRGB());
 			}
 		}
