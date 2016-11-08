@@ -11,42 +11,41 @@ import javax.imageio.ImageIO;
 public class ImageGenerator {
 	
 	private PerlinNoiseGen p;
-	
-	public ImageGenerator(){
+	private BufferedImage out;
+	public ImageGenerator(int w){
 		p = new PerlinNoiseGen();
+		out = new BufferedImage(w,w,BufferedImage.TYPE_INT_RGB);
 	}
 	
 	
-	private int perlin[][];
 	private final int NO_LAST_VALUE = -1;
 	private final int TERRAIN_TRESHOLD = 50;
 	private final int TERRAIN_MEDIAN_VALUE = 20;
 	private final int TERRAIN_MAX_DIFFERENCE = 3;
-		
-	private boolean writeFile(String path, BufferedImage out, String name) {
+	
+	private ImageGenerator generatePerlin(){
+		this.out = p.GeneratePerlin(out.getHeight(), out.getWidth());
+		return this;
+	}
+	
+	private ImageGenerator writeFile(String path, String name) {
 		try {
 			ImageIO.write(out, "png", new File(path + name + ".png"));
 			System.out.println(path + name + ".png");
-			return true;
+			return this;
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("Erro Writing File");
 		}
-		return false;
+		return null;
 	}
-	
-	private BufferedImage generateTerrain(int x, int y) {
-		BufferedImage image = new BufferedImage(x, y, BufferedImage.TYPE_INT_RGB);
-		for (int i = 0; i < x; i++) {
-			for (int j = 0; j < y; j++) {
-				z = getTerrainReference(z);
-				System.out.println(z);
-				image.setRGB(i, j, new Color(z,z,z).getRGB());
-			}
+
+	private ImageGenerator concatBorder() {
+		for (int i = 0; i < out.getHeight(); i++) {
+			out.setRGB(i, 0, new Color(0).getRed());
 		}
-		return image;
+		return this;
 	}
-	
 	private int getTerrainReference(int lastValue) {
 		System.out.println("LV: " + lastValue);
 		int count = 0;
@@ -61,53 +60,78 @@ public class ImageGenerator {
 			aux = generator.nextInt(TERRAIN_TRESHOLD) + TERRAIN_MEDIAN_VALUE;
 		}
 		System.out.println("Count: " + count);
-		if (count > 100) {
-			System.out.println(count);			
-		}
 		return aux;		
 	}
 	
-	private BufferedImage matrixIterator(int size) { 
-		BufferedImage out = new BufferedImage(size, size, BufferedImage.TYPE_INT_RGB);
+	private ImageGenerator matrixIterator() {
 		int c = getTerrainReference(NO_LAST_VALUE);
 		int rgb = new Color(c,c,c).getRGB();
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < out.getHeight(); i++) {
 			if(i == 0){
 				out.setRGB(i, i, rgb);
 				continue;
 			}
-			System.out.println(i);
-			c = getTerrainReference(c);
-			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(i, 0, rgb);
-			c = getTerrainReference(c);
-			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(0, i, rgb);
-			c = getTerrainReference(c);
-			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(i, i, rgb);
 			for (int j = i; j > 1; j--) {
-				c = getTerrainReference(c);
-				rgb = new Color(c,c,c).getRGB();
 				out.setRGB(i, j, rgb);
-				c = getTerrainReference(c);
-				rgb = new Color(c,c,c).getRGB();
 				out.setRGB(j, i, rgb);
 			}
-
 		}
-		return out;
+		return this;
+	}
+	
+	private ImageGenerator smooth(int iterations) {
+		float [][]kernel = new float[][] {
+        	{1.0f/16, 2.0f/16, 1.0f/16},
+        	{2.0f/16, 4.0f/16, 2.0f/16},
+        	{1.0f/16, 2.0f/16, 1.0f/16}
+        };
+        
+//		float [][]kernel = new float[][] {
+//			{1.0f/9, 1.0f/9, 1.0f/9},
+//			{1.0f/9, 1.0f/9, 1.0f/9},
+//			{1.0f/9, 1.0f/9, 1.0f/9}        	
+//        };
+        int width = out.getWidth();
+        int depth = out.getHeight(); 
+        for (int i = 0; i < iterations; i++) {
+        	System.out.println(i);
+        	for (int z = 0; z < depth; z++) {
+        		for (int x = 0; x < width; x++) {
+        			float tone1 = 0;
+        			for(int ky = 0; ky < 3; ky++) {
+        				for(int kx = 0; kx < 3; kx++) {
+        					int px = x + (kx - 1);
+        					int py = z + (ky - 1);
+        					
+        					if(px < 0 || px >= width || py < 0 || py >= depth) {
+        						continue;
+        					}
+        					
+        					Color pixel = new Color(out.getRGB(px, py));
+        					float r = (pixel.getRed() * kernel[kx][ky]);
+        					tone1 += r;
+        				}
+        			}
+        			out.setRGB(z, x, new Color((int)tone1, (int)tone1, (int)tone1).getRGB());
+        		}
+        	}
+		}
+        return this;
 	}
 	
 	public static void main(String[] args) {
-		ImageGenerator h = new ImageGenerator();
+		ImageGenerator h = new ImageGenerator(2000);
 //		h.writeFile("../", h.generateCompletePerlin(h.p.GeneratePerlin(200, 200)), "perlin");
 //		h.writeFile("../",	h.p.GeneratePerlin(1000, 1000), "perlin");
 //		h.writeFile("../", h.p.GeneratePerlin(1000, 1000), "perlinh");
 //		h.getTerrainReference(40);
-		h.writeFile("../", h.matrixIterator(1000), "perlin");
+//		h.writeFile("../", h.smooth(h.matrixIterator(100), 20000), "perlin");
 //		h.writeFile("../", h.generateTerrain(1000, 1000), "perlin");
-		System.out.println("Foi");
+		h.generatePerlin().writeFile("../", "perlin");
+		
 	}
 
 }
