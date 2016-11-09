@@ -19,9 +19,9 @@ public class ImageGenerator {
 	
 	
 	private final int NO_LAST_VALUE = -1;
-	private final int TERRAIN_TRESHOLD = 50;
-	private final int TERRAIN_MEDIAN_VALUE = 20;
-	private final int TERRAIN_MAX_DIFFERENCE = 3;
+	private final int TERRAIN_TRESHOLD = 100;
+	private final int TERRAIN_MEDIAN_VALUE = 10;
+	private final int TERRAIN_MAX_DIFFERENCE = 25;
 	
 	private ImageGenerator generatePerlin(){
 		this.out = p.GeneratePerlin(out.getHeight(), out.getWidth());
@@ -63,7 +63,26 @@ public class ImageGenerator {
 		return aux;		
 	}
 	
-	private ImageGenerator matrixIterator() {
+//	private ImageGenerator matrixIterator() {
+//		int c = getTerrainReference(NO_LAST_VALUE);
+//		int rgb = new Color(c,c,c).getRGB();
+//		for (int i = 0; i < out.getHeight(); i++) {
+//			if(i == 0){
+//				out.setRGB(i, i, rgb);
+//				continue;
+//			}
+//			out.setRGB(i, 0, rgb);
+//			out.setRGB(0, i, rgb);
+//			out.setRGB(i, i, rgb);
+//			for (int j = i; j > 1; j--) {
+//				out.setRGB(i, j, rgb);
+//				out.setRGB(j, i, rgb);
+//			}
+//		}
+//		return this;
+//	}
+	
+	private ImageGenerator matrixIterator() { 
 		int c = getTerrainReference(NO_LAST_VALUE);
 		int rgb = new Color(c,c,c).getRGB();
 		for (int i = 0; i < out.getHeight(); i++) {
@@ -71,13 +90,25 @@ public class ImageGenerator {
 				out.setRGB(i, i, rgb);
 				continue;
 			}
+			System.out.println(i);
+			c = getTerrainReference(c);
+			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(i, 0, rgb);
+			c = getTerrainReference(c);
+			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(0, i, rgb);
+			c = getTerrainReference(c);
+			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(i, i, rgb);
 			for (int j = i; j > 1; j--) {
+				c = getTerrainReference(c);
+				rgb = new Color(c,c,c).getRGB();
 				out.setRGB(i, j, rgb);
+				c = getTerrainReference(c);
+				rgb = new Color(c,c,c).getRGB();
 				out.setRGB(j, i, rgb);
 			}
+
 		}
 		return this;
 	}
@@ -123,14 +154,14 @@ public class ImageGenerator {
 	}
 	
 	public static void main(String[] args) {
-		ImageGenerator h = new ImageGenerator(2000);
+		ImageGenerator h = new ImageGenerator(1000);
 //		h.writeFile("../", h.generateCompletePerlin(h.p.GeneratePerlin(200, 200)), "perlin");
 //		h.writeFile("../",	h.p.GeneratePerlin(1000, 1000), "perlin");
 //		h.writeFile("../", h.p.GeneratePerlin(1000, 1000), "perlinh");
 //		h.getTerrainReference(40);
-//		h.writeFile("../", h.smooth(h.matrixIterator(100), 20000), "perlin");
+		h.matrixIterator().smooth(20).writeFile("../", "perlin2");
 //		h.writeFile("../", h.generateTerrain(1000, 1000), "perlin");
-		h.generatePerlin().writeFile("../", "perlin");
+//		h.generatePerlin().writeFile("../", "perlin");
 		
 	}
 
