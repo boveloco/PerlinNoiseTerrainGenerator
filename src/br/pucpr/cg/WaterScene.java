@@ -22,7 +22,6 @@ import br.pucpr.mage.phong.MultiTextureMaterial;
 import br.pucpr.mage.phong.SkyMaterial;
 import br.pucpr.mage.phong.WaterMaterial;
 import br.pucpr.mage.postfx.PostFXMaterial;
-import br.pucpr.cg.PerlinNoiseGen;
 
 public class WaterScene implements Scene {
     private static final String PATH = "../img/opengl/";
@@ -72,7 +71,7 @@ public class WaterScene implements Scene {
 
         //Carga do terreno
         try {
-            mesh = MeshFactory.loadTerrain(new File("../perlin.png"), 0.4f, 3);
+            mesh = MeshFactory.loadTerrain(new File("../perlin2.png"), 0.4f, 3);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
