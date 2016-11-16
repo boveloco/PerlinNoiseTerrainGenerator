@@ -19,9 +19,9 @@ public class ImageGenerator {
 	
 	
 	private final int NO_LAST_VALUE = -1;
-	private final int TERRAIN_TRESHOLD = 100;
-	private final int TERRAIN_MEDIAN_VALUE = 10;
-	private final int TERRAIN_MAX_DIFFERENCE = 25;
+	private final int TERRAIN_TRESHOLD = 150;
+	private final int TERRAIN_MEDIAN_VALUE = 40;
+	private final int TERRAIN_MAX_DIFFERENCE = 60;
 	
 	private ImageGenerator generatePerlin(){
 		this.out = p.GeneratePerlin(out.getHeight(), out.getWidth());

@@ -121,22 +121,40 @@ public class WaterScene implements Scene {
             glfwSetWindowShouldClose(glfwGetCurrentContext(), GLFW_TRUE);
             return;
         }
+          
         
-        if (keys.isDown(GLFW_KEY_LEFT_SHIFT)) {
-            SPEED *= 10;
-        }
-        
-        if (keys.isDown(GLFW_KEY_LEFT)) {
-            lookX -= SPEED * secs;
-        } else if (keys.isDown(GLFW_KEY_RIGHT)) {
-            lookX += SPEED * secs;
-        }
-        
-        if (keys.isDown(GLFW_KEY_UP)) {
-            lookY += SPEED * secs;
-        } else if (keys.isDown(GLFW_KEY_DOWN)) {
-            lookY -= SPEED * secs;
-        }    
+        if (keys.isDown(GLFW_KEY_W)) {
+            camera.moveFront(50.0f);
+         }
+
+         if (keys.isDown(GLFW_KEY_S)) {
+         	camera.moveFront(-50.0f);
+         }
+         
+         if(keys.isDown(GLFW_KEY_Q))
+         {
+         	camera.strafeLeft(10.0f);
+//         }
+         if(keys.isDown(GLFW_KEY_E))
+         {
+         	camera.strafeRight(10.0f);
+         }
+         if(keys.isDown(GLFW_KEY_A))
+         {
+         	camera.rotateY((float)Math.toRadians(60) * secs);
+         }
+         if(keys.isDown(GLFW_KEY_D))
+         {
+         	camera.rotateY((float)-Math.toRadians(60) * secs);
+         }
+         if(keys.isDown(GLFW_KEY_UP))
+         {
+         	camera.rotateX((float)Math.toRadians(60) * secs);
+         }
+         if(keys.isDown(GLFW_KEY_DOWN))
+         {
+         	camera.rotateX((float)-Math.toRadians(60) * secs);
+         }
         
 //        if (keys.isDown(GLFW_KEY_SPACE)) {
 //        	PerlinNoiseGen.GeneratePerlin(500, 500);
@@ -258,6 +276,6 @@ public class WaterScene implements Scene {
     }
 
     public static void main(String[] args) {        
-        new Window(new WaterScene(), "Water", 1024, 748).show();
+        new Window(new WaterScene(), "Water", 1600, 900).show();
     }
 }
