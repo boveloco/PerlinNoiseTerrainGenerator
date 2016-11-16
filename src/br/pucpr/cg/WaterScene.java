@@ -170,6 +170,7 @@ public class WaterScene implements Scene {
 //        }
         camera.getTarget().set(lookX, lookY, 0.0f);
         skyMaterial.addTime(secs);
+         }
     }
 
     public void drawSky(Matrix4f view) {        
