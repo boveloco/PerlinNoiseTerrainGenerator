@@ -115,14 +115,13 @@ public class WaterScene implements Scene {
 
     @Override
     public void update(float secs) {
-        float SPEED = 1000 * secs;
         
         if (keys.isPressed(GLFW_KEY_ESCAPE)) {
             glfwSetWindowShouldClose(glfwGetCurrentContext(), GLFW_TRUE);
             return;
         }
-          
-        
+                
+                
         if (keys.isDown(GLFW_KEY_W)) {
             camera.moveFront(50.0f);
          }
@@ -131,49 +130,38 @@ public class WaterScene implements Scene {
          	camera.moveFront(-50.0f);
          }
          
-         if(keys.isDown(GLFW_KEY_Q))
-         {
-         	camera.strafeLeft(10.0f);
-//         }
-         if(keys.isDown(GLFW_KEY_E))
-         {
-         	camera.strafeRight(10.0f);
-         }
          if(keys.isDown(GLFW_KEY_A))
          {
-         	camera.rotateY((float)Math.toRadians(60) * secs);
+         	camera.strafeLeft(50.0f);
          }
          if(keys.isDown(GLFW_KEY_D))
          {
-         	camera.rotateY((float)-Math.toRadians(60) * secs);
+         	camera.strafeRight(50.0f);
+         }
+         
+         if(keys.isDown(GLFW_KEY_LEFT))
+         {
+         	camera.rotateY((float)Math.toRadians(45) * secs);
+         }
+         if(keys.isDown(GLFW_KEY_RIGHT))
+         {
+         	camera.rotateY((float)-Math.toRadians(45) * secs);
          }
          if(keys.isDown(GLFW_KEY_UP))
          {
-         	camera.rotateX((float)Math.toRadians(60) * secs);
+         	camera.rotateX((float)Math.toRadians(45) * secs);
          }
          if(keys.isDown(GLFW_KEY_DOWN))
          {
-         	camera.rotateX((float)-Math.toRadians(60) * secs);
+         	camera.rotateX((float)-Math.toRadians(45) * secs);
          }
-        
-//        if (keys.isDown(GLFW_KEY_SPACE)) {
-//        	PerlinNoiseGen.GeneratePerlin(500, 500);
-//
-//            //Carga do terreno
-//            try {
-//                mesh = MeshFactory.loadTerrain(new File(PATH + "heights/perlin1.png"), 0.4f, 3);
-//            } catch (IOException e) {
-//                // TODO Auto-generated catch block
-//                e.printStackTrace();
-//                System.exit(1);
-//            }              
-//        }
+       
         camera.getTarget().set(lookX, lookY, 0.0f);
         skyMaterial.addTime(secs);
-         }
     }
 
-    public void drawSky(Matrix4f view) {        
+    public void drawSky(Matrix4f view) {    
+    	
         glDisable(GL_DEPTH_TEST);    
         Shader shader = skyMaterial.getShader();
         shader.bind()
@@ -181,7 +169,7 @@ public class WaterScene implements Scene {
             .setUniform("uView", view)            
         .unbind();
                 
-        skydome.setUniform("uWorld", new Matrix4f().scale(300));
+        skydome.setUniform("uWorld", new Matrix4f().translate(camera.getPosition()).scale(500) );
         skydome.draw(skyMaterial);
         glEnable(GL_DEPTH_TEST);
     }
