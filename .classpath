@@ -5,6 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JOML"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JOJGL"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL"/>
-	<classpathentry kind="lib" path="/Users/projecao/Downloads/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="library/json-simple-1.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
