@@ -2,9 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JOML"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JOJGL"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL"/>
 	<classpathentry kind="lib" path="library/json-simple-1.1.1.jar"/>
+	<classpathentry kind="lib" path="library/lwjgl/jar/lwjgl.jar" sourcepath="library/lwjgl/src.zip">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="PerlinNoiseTerrainGenerator/library/lwjgl/native"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="library/JOML-1.6.7/joml.jar" sourcepath="library/JOML-1.6.7/src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
