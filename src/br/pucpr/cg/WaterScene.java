@@ -24,7 +24,7 @@ import br.pucpr.mage.phong.WaterMaterial;
 import br.pucpr.mage.postfx.PostFXMaterial;
 
 public class WaterScene implements Scene {
-    private static final String PATH = "../img/opengl/";
+    private static final String PATH = "img/opengl/";
     private static final float WATER_H = 11.0f;
     
     private Keyboard keys = Keyboard.getInstance();
@@ -71,7 +71,7 @@ public class WaterScene implements Scene {
 
         //Carga do terreno
         try {
-            mesh = MeshFactory.loadTerrain(new File("../perlin2.png"), 0.4f, 3);
+            mesh = MeshFactory.loadTerrain(new File("img/perlin.png"), 0.4f, 3);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
