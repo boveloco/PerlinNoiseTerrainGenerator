@@ -4,11 +4,13 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.json.simple.parser.ParseException;
 
 import br.pucpr.mage.FrameBuffer;
 import br.pucpr.mage.Keyboard;
@@ -24,8 +26,10 @@ import br.pucpr.mage.phong.WaterMaterial;
 import br.pucpr.mage.postfx.PostFXMaterial;
 
 public class WaterScene implements Scene {
+	private ImageGenerator perlin;
+	
     private static final String PATH = "img/opengl/";
-    private static final float WATER_H = 11.0f;
+    private static final float WATER_H = 25.0f;
     
     private Keyboard keys = Keyboard.getInstance();
     
@@ -70,6 +74,7 @@ public class WaterScene implements Scene {
                 new Vector3f( 1.0f,  1.0f,  1.0f));   //specular
 
         //Carga do terreno
+        perlin = new ImageGenerator(1000);
         try {
             mesh = MeshFactory.loadTerrain(new File("img/perlin.png"), 0.4f, 3);
         } catch (IOException e) {
@@ -98,7 +103,7 @@ public class WaterScene implements Scene {
         skyMaterial.setCloud2(new Texture(PATH + "textures/cloud2.png"));
         
         //Carga da água
-        water = MeshFactory.createXZSquare(400, 300, WATER_H);
+        water = MeshFactory.createXZSquare(1000, 1000, WATER_H);
         waterMaterial = new WaterMaterial();
         
         refractionFB = FrameBuffer.forCurrentViewport();
@@ -155,6 +160,17 @@ public class WaterScene implements Scene {
          {
          	camera.rotateX((float)-Math.toRadians(45) * secs);
          }
+         
+	     if (keys.isDown(GLFW_KEY_SPACE)) {
+	    	 try {
+				perlin.loadFromConfig();
+				mesh = MeshFactory.loadTerrain(new File("img/perlin.png"), 0.4f, 3);
+			} catch (ParseException | IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				System.exit(1);
+			}            
+	     }
        
         camera.getTarget().set(lookX, lookY, 0.0f);
         skyMaterial.addTime(secs);
@@ -264,7 +280,7 @@ public class WaterScene implements Scene {
     public void deinit() {
     }
 
-    public static void main(String[] args) {        
+    public static void main(String[] args) throws FileNotFoundException, ParseException, IOException {        
         new Window(new WaterScene(), "Water", 1600, 900).show();
     }
 }

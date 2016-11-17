@@ -3,37 +3,38 @@ package br.pucpr.cg;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import org.json.simple.parser.ParseException;
+
 public class ImageGenerator {
 	
-	private PerlinNoiseGen p;
 	private BufferedImage out;
+	private Parser parse;
+	
 	public ImageGenerator(int w){
-		p = new PerlinNoiseGen();
+		parse = new Parser();
 		out = new BufferedImage(w,w,BufferedImage.TYPE_INT_RGB);
 	}
 	
+	private final String PATH_OUT_FILE = "img/";
+	private final String NAME_OUT_FILE = "perlin";
 	
 	private final int NO_LAST_VALUE = -1;
 	
-	private final static int MAX_SMOOTH_FILTER = 10;
-	private final static int TERRAIN_TRESHOLD = 150;
-	private final static int TERRAIN_MIN_VALUE = 40;
-	private final static int TERRAIN_MAX_DIFFERENCE = 60;
+	private int MAX_SMOOTH_FILTER = 10;
+	private int TERRAIN_TRESHOLD = 150;
+	private int TERRAIN_MIN_VALUE = 40;
+	private int TERRAIN_MAX_DIFFERENCE = 60;
 	
-	private ImageGenerator generatePerlin(){
-		this.out = p.GeneratePerlin(out.getHeight(), out.getWidth());
-		return this;
-	}
-	
-	private ImageGenerator writeFile(String path, String name) {
+	private ImageGenerator writeFile() {
 		try {
-			ImageIO.write(out, "png", new File(path + name + ".png"));
-			System.out.println(path + name + ".png");
+			ImageIO.write(out, "png", new File(PATH_OUT_FILE + NAME_OUT_FILE + ".png"));
+			System.out.println(PATH_OUT_FILE + NAME_OUT_FILE + ".png");
 			return this;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -48,8 +49,17 @@ public class ImageGenerator {
 		}
 		return this;
 	}
+	public ImageGenerator loadFromConfig() throws FileNotFoundException, ParseException, IOException{
+		parse.parser();
+		this.MAX_SMOOTH_FILTER = parse.MSF;
+		this.TERRAIN_TRESHOLD = parse.TTH;
+		this.TERRAIN_MIN_VALUE = parse.TMV;
+		this.TERRAIN_MAX_DIFFERENCE = parse.TMD;
+		return this.matrixIterator().smooth(MAX_SMOOTH_FILTER).writeFile();
+		
+	}
 	private int getTerrainReference(int lastValue) {
-		System.out.println("LV: " + lastValue);
+//		System.out.println("LV: " + lastValue);
 		int count = 0;
 		Random generator = new Random();
 		int aux;
@@ -61,7 +71,7 @@ public class ImageGenerator {
 			count++;
 			aux = generator.nextInt(TERRAIN_TRESHOLD) + TERRAIN_MIN_VALUE;
 		}
-		System.out.println("Count: " + count);
+//		System.out.println("Count: " + count);
 		return aux;		
 	}
 	
@@ -73,7 +83,7 @@ public class ImageGenerator {
 				out.setRGB(i, i, rgb);
 				continue;
 			}
-			System.out.println(i);
+//			System.out.println(i);
 			c = getTerrainReference(c);
 			rgb = new Color(c,c,c).getRGB();
 			out.setRGB(i, 0, rgb);
@@ -112,7 +122,7 @@ public class ImageGenerator {
         int width = out.getWidth();
         int depth = out.getHeight(); 
         for (int i = 0; i < iterations; i++) {
-        	System.out.println(i);
+//        	System.out.println(i);
         	for (int z = 0; z < depth; z++) {
         		for (int x = 0; x < width; x++) {
         			float tone1 = 0;
@@ -136,13 +146,6 @@ public class ImageGenerator {
 		}
         return this;
 	}
-	
-	public static void main(String[] args) {
-		ImageGenerator h = new ImageGenerator(1000);
-		h.matrixIterator().smooth(MAX_SMOOTH_FILTER).writeFile("img/", "perlin");
-		
-	}
-
 }
 
  
