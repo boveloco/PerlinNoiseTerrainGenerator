@@ -43,6 +43,7 @@ public class ImageGenerator {
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	private ImageGenerator concatBorder() {
 		for (int i = 0; i < out.getHeight(); i++) {
 			out.setRGB(i, 0, new Color(0).getRed());
@@ -60,7 +61,7 @@ public class ImageGenerator {
 	}
 	private int getTerrainReference(int lastValue) {
 //		System.out.println("LV: " + lastValue);
-		int count = 0;
+//		int count = 0;
 		Random generator = new Random();
 		int aux;
 		aux = generator.nextInt(TERRAIN_TRESHOLD) + TERRAIN_MIN_VALUE;
@@ -68,7 +69,7 @@ public class ImageGenerator {
 			return aux;
 		} 
 		while (Math.abs(aux - lastValue) > TERRAIN_MAX_DIFFERENCE) {
-			count++;
+//			count++;
 			aux = generator.nextInt(TERRAIN_TRESHOLD) + TERRAIN_MIN_VALUE;
 		}
 //		System.out.println("Count: " + count);

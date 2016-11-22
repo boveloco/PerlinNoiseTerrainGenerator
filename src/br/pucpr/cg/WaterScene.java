@@ -57,6 +57,8 @@ public class WaterScene implements Scene {
     private Mesh canvas;
     private FrameBuffer fb;
     private PostFXMaterial postFX;
+    private float exposure = 0.5f;
+    private String fx = "fxNone";
     
     @Override
     public void init() {
@@ -69,7 +71,7 @@ public class WaterScene implements Scene {
         
         light = new DirectionalLight(
                 new Vector3f( 1.0f, -1.0f, -1.0f),    //direction
-                new Vector3f( 0.1f,  0.1f,  0.1f), //ambient
+                new Vector3f( 0.1f,  0.1f,  0.1f),    //ambient
                 new Vector3f( 1.0f,  1.0f,  1.0f),    //diffuse
                 new Vector3f( 1.0f,  1.0f,  1.0f));   //specular
 
@@ -115,7 +117,7 @@ public class WaterScene implements Scene {
         //Carga do canvas para o PostFX
         canvas = MeshFactory.createCanvas();
         fb = FrameBuffer.forCurrentViewport();
-        postFX = PostFXMaterial.defaultPostFX("fxNone", fb);
+        postFX = PostFXMaterial.defaultPostFX(fx, fb);
     }
 
     @Override
@@ -143,6 +145,12 @@ public class WaterScene implements Scene {
          {
          	camera.strafeRight(50.0f);
          }
+         if(keys.isDown(GLFW_KEY_I)){
+        	 exposure -= 0.01;
+         }
+         if(keys.isDown(GLFW_KEY_O)){
+        	 exposure += 0.01;
+         }
          
          if(keys.isDown(GLFW_KEY_LEFT))
          {
@@ -164,6 +172,11 @@ public class WaterScene implements Scene {
 	     if (keys.isDown(GLFW_KEY_SPACE)) {
 	    	 try {
 				perlin.loadFromConfig();
+				Parser p = new Parser().parser();
+				if(p.fx != null)
+					this.fx = p.fx;
+				System.out.println(p.fx);
+				postFX = PostFXMaterial.defaultPostFX(fx, fb);
 				mesh = MeshFactory.loadTerrain(new File("img/perlin.png"), 0.4f, 3);
 			} catch (ParseException | IOException e1) {
 				// TODO Auto-generated catch block
@@ -271,6 +284,10 @@ public class WaterScene implements Scene {
         fb.bind();
         drawScene();
         fb.unbind();
+        
+        //HDR
+        postFX.getShader().bind().setUniform("exposure", exposure);
+        postFX.getShader().unbind();
         
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);        
         canvas.draw(postFX);
