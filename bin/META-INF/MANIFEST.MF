@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Class-Path: .
+Main-Class: br.pucpr.cg.WaterScene
+
+Name: org/lwjgl/
+Specification-Title: Lightweight Java Game Library
+Implementation-Title: lwjgl
+Implementation-Version: build 64
+Specification-Version: 3.0.0b
+Specification-Vendor: lwjgl.org
+Implementation-Vendor: lwjgl.org
+
