@@ -17,6 +17,7 @@ public class Parser {
 	public int TTH;
 	public int TMV;
 	public int TMD;
+	public String fx;
 	JSONParser parser; 
 	
 	public Parser(){
@@ -25,6 +26,7 @@ public class Parser {
 		TTH = -1;
 		TMV = -1;
 		TMD = -1;
+		fx = null;
 	}
 	
 	public Parser parser() throws FileNotFoundException, ParseException, IOException{
@@ -34,6 +36,8 @@ public class Parser {
 		TTH = toIntExact((long)json.get("TERRAIN_TRESHOLD"));
 	    TMV = toIntExact((long)json.get("TERRAIN_MIN_VALUE"));
 	    TMD = toIntExact((long)json.get("TERRAIN_MAX_DIFFERENCE"));
+	    fx =  (String) json.get("POST_FX");
+	    
 	    System.out.println(MSF + " - " +  TTH + " - " + TMV + " - " +  TMD);
 	    return this;
 	}
