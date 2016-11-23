@@ -15,7 +15,9 @@ There's a file in root folder in project called 'config.json' that defines all p
 
 # Hotkeys #
 While up and running the project, you can use WASD to move the camera position and use the Arrow keys to move the camera directions..
+
 With the space keys, it loads the configuration inside the config.json file and generate again the terrain. (It changes the PostFX too). # Will Always generate the terrain #!
+
 While on HDR mode, you can use the keys 'I' or 'O' to increase or decrease the exposure value.
 
 # Thanks #
